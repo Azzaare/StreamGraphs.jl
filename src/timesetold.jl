@@ -1,13 +1,18 @@
 ### Types
-abstract type AbstractInterval end
+
+abstract type AbstractTimeSet end
+abstract type AbstractInterval <: AbstractTimeSet end
 
 # To keep consistency with a total order on bound
 # false means open set and true closed set
 struct Interval{T<:AbstractFloat} <: AbstractInterval
-    start::Tuple{T,Bool}
-    finish::Tuple{T,Bool}
+    α::Tuple{T,Bool}
+    ω::Tuple{T,Bool}
 end
-const IntervalSet{T<:AbstractFloat} = Vector{Interval{T}}
+
+struct EmptyInterval <: AbstractInterval end
+
+IntervalSet{T<:AbstractFloat} = Vector{Interval{T}}
 
 function IntervalSet(interval::EmptyInterval)
     return IntervalSet{Float64}()
@@ -18,21 +23,11 @@ function IntervalSet(interval::Interval{<:AbstractFloat})
     return is
 end
 
-const InstantSet{T<:Real} = Vector{T}
-
-const TimeSet = Union{AbstractRange, IntervalSet, InstantSet}
+struct TimeStepSet{T<:Real} <: AbstractTimeSet
+    steps::Vector{T}
+end
 
 ### Functions
-
-function start(IS::IntervalSet{<:AbstractFloat})
-    return IS[1].start
-end
-
-function finish(IS::IntervalSet{<:AbstractFloat})
-    return IS[1].finish
-end
-
-function step()
 
 ## Unions
 function union(is1::IntervalSet{<:AbstractFloat}, is2::IntervalSet{<:AbstractFloat})

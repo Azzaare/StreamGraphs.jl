@@ -1,6 +1,9 @@
 module StreamGraphs
 
-import Base.string
+import Base.show
+
+using SparseArrays
+using OrderedCollections
 
 include("timeset.jl")
 include("streamgraph.jl")
